@@ -1,0 +1,59 @@
+<mat-drawer-container *ngIf="!curtain" class="main-wrapper">
+  <mat-drawer
+    #drawer2
+    mode="side"
+    [opened]="leftSidenavOpened"
+    [ngClass]="{
+      'example-container-left': !isMobile,
+      'example-container-mobile-left': isMobile
+    }"
+  >
+    <app-wallet></app-wallet>
+  </mat-drawer>
+
+  <app-map-gl></app-map-gl>
+  <div [@slideUpIn]="outletRef.isActivated ? outletRef.activatedRoute : ''">
+    <router-outlet #outletRef="outlet"></router-outlet>
+  </div>
+
+  <mat-drawer
+    #drawer
+    position="end"
+    mode="side"
+    [ngClass]="{
+      'example-container': !isMobile,
+      'example-container-mobile': isMobile
+    }"
+    [opened]="rightSidenavOpened"
+  >
+    <!-- Move to separate component -->
+
+    <div class="sidenav-open fab-close" *ngIf="isMobile">
+      <button (click)="uxService.closeSidenav()" mat-icon-button>
+        <mat-icon color="primary">close</mat-icon>
+      </button>
+    </div>
+    <mat-toolbar color="secondary" class="right-side-toolbar">
+      <div class="toolbar-label">
+        <span class="toolbar-span">NFTs Layer #1</span>
+      </div>
+      <!-- TODO: add button to add NFTs -->
+      <button
+        class="create-nft"
+        *ngIf="isAdmin"
+        (click)="createNft()"
+        mat-button
+        color="primary"
+      >
+        Create NFT
+      </button>
+    </mat-toolbar>
+    <app-nft-list [nfts]="nfts"></app-nft-list>
+  </mat-drawer>
+</mat-drawer-container>
+<div class="curtain" [@slideOut] *ngIf="curtain">
+  <app-curtain
+    (connectToMetamask)="connectToMetamask()"
+    [loading]="loading"
+  ></app-curtain>
+</div>
